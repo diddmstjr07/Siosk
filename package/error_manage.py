@@ -6,3 +6,6 @@ class NondirectoryError(Exception):
 
 class ConnectionRefusedError(Exception):
     pass
+
+class ServerDownedError(Exception):
+    pass

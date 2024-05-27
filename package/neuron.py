@@ -18,12 +18,15 @@ class NeuronAggregate:
     def Detection(self):
         converter = SpeechToTextConverter()
         micro_result = converter.check_microphone()
-        print("\n-----------------------------------")
         for i in range(len(micro_result)):
-            print(micro_result[i])
-        print("-----------------------------------\n")
-        index = int(input("Please Select Microphone and Type number of index: "))
-        return index
+            if "MacBook Pro 마이크" in micro_result[i]:
+                return int(str(micro_result[i])[1])
+        # print("\n-----------------------------------")
+        # for i in range(len(micro_result)):
+        #     print(micro_result[i])
+        # print("-----------------------------------\n")
+        # index = int(input("Please Select Microphone and Type number of index: "))
+        # return index
 
     def Trans(self, index):
         converter = SpeechToTextConverter()

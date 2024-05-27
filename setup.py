@@ -17,6 +17,7 @@ class CheckArguments:
             "--force",
             "portaudio",
             "sox",
+            "python-tk"
         ]
         return brew_command
 
