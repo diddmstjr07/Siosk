@@ -1,8 +1,7 @@
 from .neuron import NeuronAggregate
 from google_speech import Speech
-from .client.anoask import Api
+from Siosk.package.anoask import Api
 import os
-import subprocess
 
 class API:
     def __init__(self, token) -> None:
@@ -14,25 +13,28 @@ class API:
         Neuron = NeuronAggregate()
         return api, Neuron
 
-    def siosk(self):
+    def preparing(self):
         api, Neuron = self.load_models()
         index = Neuron.Detection()
-        while True:
-            print("Talking...")
-            keyword = Neuron.Trans(index)
-            print("Speaking...")
-            if keyword == None:
-                pass
-            else:
-                keywords = str(keyword).split()
-                for i in range(len(keywords)):
-                    if keywords[i] == "멈춰":
-                        speech = Speech(str("프로그램 가동을 멈춥니다."), "ko")
-                        speech.play()
-                        print("Stopping and Exiting...")
-                        os._exit(0)
-            print(keyword)
-            result, embedding_time = api.send_response(self.token, keyword)
-            speech = Speech(result, "ko")
-            speech.play()
-        
+        self.api = api
+        self.index = index
+        self.Neuron = Neuron
+    
+    def detecting(self):
+        print("Talking...")
+        self.keyword = self.Neuron.Trans(self.index)
+        print("Speaking...")
+        if self.keyword == None:
+            pass
+        else:
+            keywords = str(self.keyword).split()
+            for i in range(len(keywords)):
+                if keywords[i] == "멈춰":
+                    speech = Speech(str("프로그램 가동을 멈춥니다."), "ko")
+                    speech.play()
+                    print("Stopping and Exiting...")
+                    os._exit(0)
+        print(self.keyword)
+        result, embedding_time = self.api.send_response(self.token, self.keyword)
+        speech = Speech(result, "ko")
+        speech.play()

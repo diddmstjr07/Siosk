@@ -1,8 +1,8 @@
 import requests
 from urllib3.exceptions import InsecureRequestWarning
 import time
-from package.error_manage import ConnectionRefusedError
-from package.error_manage import ServerDownedError
+from Siosk.package.error_manage import ConnectionRefusedError
+from Siosk.package.error_manage import ServerDownedError
 
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 import webbrowser
