@@ -1,1 +1,1 @@
-# Siosk Package version 1.0
+# Siosk Package version 2.3
