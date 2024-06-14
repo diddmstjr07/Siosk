@@ -17,7 +17,7 @@ class SpeechToTextConverter:
         mic = self.detection.Microphone(device_index=index)
         try:
             with mic as source:
-                audio = self.detector.listen(source, timeout = 1, phrase_time_limit = 10)
+                audio = self.detector.listen(source, timeout = 10, phrase_time_limit = 1.5)
                 result = self.detector.recognize_google(audio, language='ko-KR')
                 return result
         except self.error_non:

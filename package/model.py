@@ -2,6 +2,7 @@ from .neuron import NeuronAggregate
 from google_speech import Speech
 from Siosk.package.anoask import Api
 import os
+import six
 
 class API:
     def __init__(self, token) -> None:
@@ -19,6 +20,21 @@ class API:
         self.api = api
         self.index = index
         self.Neuron = Neuron
+
+    def texture_load_models(self):
+        api = Api()
+        return api
+
+    def texture_preparing(self):
+        api = self.texture_load_models()
+        self.api = api
+
+    def texture(self, keyword):
+        if isinstance(keyword, six.string_types): 
+            result, embedding_time = self.api.send_response(self.token, keyword)
+            return result, embedding_time
+        else:
+            os._exit(0)
     
     def detecting(self):
         print("Talking...")
@@ -36,5 +52,6 @@ class API:
                     os._exit(0)
         print(self.keyword)
         result, embedding_time = self.api.send_response(self.token, self.keyword)
+        print(embedding_time)
         speech = Speech(result, "ko")
         speech.play()

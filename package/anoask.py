@@ -7,7 +7,7 @@ from Siosk.package.error_manage import ServerDownedError
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 import webbrowser
 
-url = "https://anoask.site"
+url = "http://10.211.55.5"
 
 class Api:
     def __init__(self) -> None:
@@ -16,7 +16,7 @@ class Api:
     def send_response(self, token, ques):
         start_time = time.time()
         try:
-            response = requests.get(f"https://anoask.site:9460/api?token={token}&ques={ques}", verify=False)
+            response = requests.get(f"http://10.211.55.5:9460/api?token={token}&ques={ques}", verify=False)
             result = response.json()['detail']
             if result == 'error':
                 webbrowser.open(url)
