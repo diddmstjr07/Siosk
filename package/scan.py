@@ -86,3 +86,34 @@ def find_process_by_port(port):
         os.system(clear_terminal())
         return False
 
+def find_process_by_port_Voice(port):
+    try:
+        if os_system == "Windows":
+            return_data = windows_track(port)
+        else:
+            return_data = unix_track(port)
+
+        if return_data == False:
+            print("\033[1;31m" + "ERROR" + "\033[0m" + ":" + f"     Is there any process is working on Port 9460?")
+            raise ServerPortUsingError
+        elif return_data == True:
+            result_data =  f'No process found using port {port}'
+            print("\033[1;32m" + "INFO" + "\033[0m" + ":" + f"     {result_data}")
+            print("\033[1;32m" + "INFO" + "\033[0m" + ":" + f"     Directing...")
+            time.sleep(3)
+            return False
+        else:
+            process_name, pid = str(return_data).split(" | ")
+            result_data = f'1 process found using port http://127.0.0.1:9460 name: {process_name}, PID: {pid}'
+            print("\033[1;32m" + "INFO" + "\033[0m" + ":" + f"     {result_data}")
+            print("\033[1;32m" + "INFO" + "\033[0m" + ":" + f"     Directing...")
+            time.sleep(3)
+            return True
+        
+    except subprocess.CalledProcessError:
+        result_data =  f'No process found using port {port}'
+        print("\033[1;32m" + "INFO" + "\033[0m" + ":" + f"     {result_data}")
+        print("\033[1;32m" + "INFO" + "\033[0m" + ":" + f"     Directing...")
+        time.sleep(3)
+        return False
+
