@@ -8,7 +8,7 @@ requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 import webbrowser
 
 class Api: # Server Connection
-    def __init__(self, url) -> None:
+    def __init__(self, url) -> str:
         self.url = url # url classify variable
 
     def send_response(self, token, ques): # token, ques을 매개변수로 받음

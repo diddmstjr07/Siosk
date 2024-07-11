@@ -45,7 +45,7 @@ def unix_track(port):
         process_info = result[1].split()
         process_name = str(process_info[0])
         processer = process_name[:6]
-        if processer != "python":
+        if processer != "Python":
             return False
         pid = process_info[1]
         return f"{process_name} | {pid}"

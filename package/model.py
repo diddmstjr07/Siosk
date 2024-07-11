@@ -1,13 +1,15 @@
 from .neuron import NeuronAggregate
 from google_speech import Speech
 from Siosk.package.anoask import Api
+from Siosk.package.TTS import TextToSpeech
 import os
 import six
 
 class API:
-    def __init__(self, token, url) -> None:
+    def __init__(self, token, url) -> str:
         self.token = token # Api Token
         self.url = url # Sending url
+        self.TextToSpeech = TextToSpeech()
 
     def load_models(self):
         api = Api(url=self.url) 
@@ -35,6 +37,14 @@ class API:
             return result, embedding_time # 다시 결과와 시간을 return
         else:
             os._exit(0) # 문자의 종류가 str이 아닌 경우 exit
+
+    def detection(self, result):
+        filename = "./SioPackage/Siosk/assets/audio/" + result + ".mp3" 
+        if os.path.isfile(filename):
+            self.TextToSpeech.voice(resultment=filename, flag=True)
+        else:
+            self.TextToSpeech.convert_prepare(target_data=result)
+            self.TextToSpeech.voice(resultment=False, flag=False)
     
     def detecting(self):
         print("Talking...")
@@ -50,5 +60,4 @@ class API:
         print(self.keyword) # 단어 출력
         result, embedding_time = self.api.send_response(self.token, self.keyword) # 위에서 매개변수로 삼은 token과 받은 keyword를 매개변수로써 전송
         print(embedding_time) # 시간 출력
-        speech = Speech(result, "ko") # 결과를 TTS로 출력
-        speech.play() # play
+        self.detection(result)
