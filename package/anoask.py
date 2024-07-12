@@ -6,6 +6,7 @@ from Siosk.package.error_manage import ServerDownedError
 
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 import webbrowser
+import socket
 
 class Api: # Server Connection
     def __init__(self, url) -> str:
