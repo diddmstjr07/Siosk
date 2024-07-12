@@ -14,15 +14,18 @@ class SpeechToTextConverter:
         return detected
     
     def Detecting(self, index):
-        mic = self.detection.Microphone(device_index=index) # 지정된 마이크로 음성 인식 시작
+        mic = self.detection.Microphone(device_index=index)
         try:
             with mic as source:
-                audio = self.detector.listen(source, timeout = 10, phrase_time_limit = 1.5)
+                self.detector.dynamic_energy_threshold = True
+                print("Listening...")  # 사용자에게 듣고 있음을 알림
+                audio = self.detector.listen(source, timeout=15, phrase_time_limit=2.5)
+                print("Recognizing...")  # 인식 중임을 알림
                 result = self.detector.recognize_google(audio, language='ko-KR')
                 return result
         except self.error_non:
-            print("Non Voice Detected")
+            print("음성이 감지되지 않았습니다.")
             return None
         except self.error_wait:
-            print("Non Voice Detected")
+            print("시간 초과되었습니다.")
             return None
