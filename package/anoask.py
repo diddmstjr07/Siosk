@@ -23,10 +23,14 @@ class Api: # Server Connection
                 print('to get new token, please visit https://anoask.site and login to issue')
                 raise ConnectionRefusedError
         except KeyError: # 키에러인 경우, 적절하게 반환된 결과이기 때문에, 추출
+            print(response)
             result = response.json()['message'] # 결과 추출
+            print(result)
+            Q = str(result).split(" | ")[0]
+            A = str(result).split(" | ")[1]
             end_time = time.time() # 종료
             embedding_time = end_time - start_time # 임배디드 시간 측정
-            return result, embedding_time # 결과나 임배디드 시간 반환
+            return Q, A, embedding_time # 결과나 임배디드 시간 반환
         except requests.exceptions.ConnectionError:
             print("\033[31m" + '404 Refused Error' + "\033[0m" + ': Server is downed... Please Contact us we will found problem immediately') # 연결 에러인 경우, 서버 다운 메세지 출력
             raise ServerDownedError

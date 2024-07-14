@@ -10,6 +10,7 @@ import six
 import socket
 import requests
 import webbrowser
+import asyncio
 
 class API:
     def __init__(self, token, url) -> str:
@@ -60,18 +61,17 @@ class API:
 
     def texture(self, keyword):
         if isinstance(keyword, six.string_types):  # keyword의 종류가 문자열인지 확인
-            result, embedding_time = self.api.send_response(self.token, keyword) # 위에서 매개변수로 삼은 token과 받은 keyword를 매개변수로써 전송
-            return result, embedding_time # 다시 결과와 시간을 return
+            Q, A, embedding_time = self.api.send_response(self.token, keyword) # 위에서 매개변수로 삼은 token과 받은 keyword를 매개변수로써 전송
+            return A, embedding_time # 다시 결과와 시간을 return
         else:
             os._exit(0) # 문자의 종류가 str이 아닌 경우 exit
 
-    def detection(self, result):
-        filename = "./SioPackage/Siosk/assets/audio/" + result + ".mp3" 
-        if os.path.isfile(filename):
-            self.TextToSpeech.voice(resultment=filename, flag=True)
-        else:
-            self.TextToSpeech.convert_prepare(target_data=result)
-            self.TextToSpeech.voice(resultment=False, flag=False)
+    def detection(self, result) -> str: # API로부터 반환되어진 result 값을 인자로
+        filename = "Siosk/assets/audio/" + result + ".mp3" # file name creation
+        if os.path.isfile(filename): # 있다면,
+            asyncio.run(self.TextToSpeech.voice(target=False, resultment=filename, flag=True)) # 그 파일 재생하기
+        else: # 없으면
+            asyncio.run(self.TextToSpeech.voice(target=result, resultment=False, flag=False)) # 그자리에서 재생하기
     
     def detecting(self):
         print("Talking...")
@@ -85,6 +85,8 @@ class API:
                 print("Stopping and Exiting...")
                 os._exit(0)
         print(self.keyword) # 단어 출력
-        result, embedding_time = self.api.send_response(self.token, self.keyword) # 위에서 매개변수로 삼은 token과 받은 keyword를 매개변수로써 전송
+        Q, A, embedding_time = self.api.send_response(self.token, self.keyword) # 위에서 매개변수로 삼은 token과 받은 keyword를 매개변수로써 전송
         print(embedding_time) # 시간 출력
-        self.detection(result)
+        self.detection(A) # detection 함수 호출
+        if A == "카드를 삽입해주십시오. 결제가 완료되었습니다 방문해주셔서 감사합니다":
+            os._exit(0)

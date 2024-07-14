@@ -35,7 +35,7 @@ def windows_track(port) -> int:
                 return f"{program} | {str(pid_val)}"
         return True
     except Exception as e:
-        return False
+        return False, program
 
 def unix_track(port):
     result = subprocess.check_output(['lsof', '-i', f':{port}'])
@@ -49,19 +49,19 @@ def unix_track(port):
             pid = process_info[1]
             return f"{process_name} | {pid}"
         else:
-            return False
+            return False, processer
     else:
         return True
         
 def find_process_by_port(port):
     try:
         if os_system == "Windows":
-            return_data = windows_track(port)
+            return_data, processer = windows_track(port)
         else:
-            return_data = unix_track(port)
+            return_data, processer = unix_track(port)
 
         if return_data == False:
-            print("\033[1;31m" + "ERROR" + "\033[0m" + ":" + f"     Is there any process is working on Port 9460?")
+            print("\033[1;31m" + "ERROR" + "\033[0m" + ":" + f"     Is there any process is working on Port 9460? | {processer} is running currently")
             raise ServerPortUsingError
         elif return_data == True:
             result_data =  f'No process found using port {port}'

@@ -1,3 +1,5 @@
+import time
+
 class SpeechToTextConverter:
     def __init__(self):
         import speech_recognition
@@ -15,17 +17,17 @@ class SpeechToTextConverter:
     
     def Detecting(self, index):
         mic = self.detection.Microphone(device_index=index)
-        try:
-            with mic as source:
-                self.detector.dynamic_energy_threshold = True
-                print("Listening...")  # 사용자에게 듣고 있음을 알림
-                audio = self.detector.listen(source, timeout=15, phrase_time_limit=2.5)
-                print("Recognizing...")  # 인식 중임을 알림
-                result = self.detector.recognize_google(audio, language='ko-KR')
-                return result
-        except self.error_non:
-            print("음성이 감지되지 않았습니다.")
-            return None
-        except self.error_wait:
-            print("시간 초과되었습니다.")
-            return None
+        with mic as source:
+            self.detector.dynamic_energy_threshold = True
+            print("Listening...") 
+            while True:  # 무한 루프로 음성 감지 시도
+                try:
+                    stra = time.time()
+                    audio = self.detector.listen(source, timeout=1.5, phrase_time_limit=10)  # 2.5초 동안만 듣기 시도
+                    result = self.detector.recognize_google(audio, language="ko-KR")
+                    print("Embbedd time: " + str(time.time() - stra))
+                    return result
+                except self.error_non:
+                    print("None Voice Detected")
+                except self.error_wait:
+                    print("Timeout Detected")
