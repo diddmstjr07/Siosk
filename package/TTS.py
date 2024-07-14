@@ -24,8 +24,34 @@ class Loading:
 
 class TextToSpeech:
     def __init__(self) -> None:
-        self.VOICE = "ko-KR-HyunsuNeural"
+        self.VOICE = "ko-KR-SunHiNeural"
         self.Loading = Loading()
+        if self.VOICE == "ko-KR-HyunsuNeural":
+            self.CHUNK_REMOVE = -1000
+        elif self.VOICE == "ko-KR-InJoonNeural":
+            self.CHUNK_REMOVE = -1000
+        elif self.VOICE == "ko-KR-SunHiNeural":
+            self.CHUNK_REMOVE = -500
+    
+    """
+    --------------------
+    Name: Microsoft Server Speech Text to Speech Voice (ko-KR, HyunsuNeural)
+    ShortName: ko-KR-HyunsuNeural
+    Gender: Male
+    Locale: ko-KR
+    Chunck Removmental Time: [:-500]
+    --------------------
+    Name: Microsoft Server Speech Text to Speech Voice (ko-KR, InJoonNeural)
+    ShortName: ko-KR-InJoonNeural [:-1000]
+    Gender: Male
+    Locale: ko-KR
+    --------------------
+    Name: Microsoft Server Speech Text to Speech Voice (ko-KR, SunHiNeural)
+    ShortName: ko-KR-SunHiNeural
+    Gender: Female
+    Locale: ko-KR
+    --------------------
+    """
     
     async def downloading(self):
         folder_path = 'Siosk/assets/audio'
@@ -54,7 +80,7 @@ class TextToSpeech:
         """Main function"""
         if flag == True: 
             print("Audio Usage")
-            audio = AudioSegment.from_file(resultment, format="mp3")[:-1000]
+            audio = AudioSegment.from_file(resultment, format="mp3")[:self.CHUNK_REMOVE]
             play(audio)
         elif flag == False:
             communicate = edge_tts.Communicate(target, self.VOICE)
@@ -63,7 +89,7 @@ class TextToSpeech:
                 if chunk["type"] == "audio":
                     audio_data += chunk["data"]
             try:
-                await play(AudioSegment.from_file(BytesIO(audio_data), format="mp3")[:-1000])
+                await play(AudioSegment.from_file(BytesIO(audio_data), format="mp3")[:self.CHUNK_REMOVE])
             except:
                 pass
 

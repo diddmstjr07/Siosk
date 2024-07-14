@@ -1,7 +1,5 @@
 import subprocess
 from Siosk.package.error_manage import ServerPortUsingError
-from auto.clear_terminal import clear_terminal
-import os
 import time
 import platform
 
@@ -90,9 +88,15 @@ def find_process_by_port(port):
 def find_process_by_port_Voice(port):
     try:
         if os_system == "Windows":
-            return_data, processer = windows_track(port)
+                try:
+                    return_data, processer = windows_track(port)
+                except ValueError:
+                    return_data = windows_track(port)
         else:
-            return_data, processer = unix_track(port)
+                try:
+                    return_data, processer = unix_track(port)
+                except ValueError:
+                    return_data = unix_track(port)
 
         if return_data == False:
             print("\033[1;31m" + "ERROR" + "\033[0m" + ":" + f"     Is there any process is working on Port 9460? | {processer} is running currently")
