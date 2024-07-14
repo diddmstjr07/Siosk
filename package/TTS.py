@@ -50,11 +50,11 @@ class TextToSpeech:
             resultment: str, 
             flag: bool
         ) -> None: # model.py line 70
-        
+
         """Main function"""
         if flag == True: 
             print("Audio Usage")
-            audio = AudioSegment.from_file(resultment, format="mp3")
+            audio = AudioSegment.from_file(resultment, format="mp3")[:-1000]
             play(audio)
         elif flag == False:
             communicate = edge_tts.Communicate(target, self.VOICE)
@@ -63,7 +63,7 @@ class TextToSpeech:
                 if chunk["type"] == "audio":
                     audio_data += chunk["data"]
             try:
-                await play(AudioSegment.from_file(BytesIO(audio_data), format="mp3"))
+                await play(AudioSegment.from_file(BytesIO(audio_data), format="mp3")[:-1000])
             except:
                 pass
 

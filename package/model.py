@@ -73,20 +73,12 @@ class API:
         else: # 없으면
             asyncio.run(self.TextToSpeech.voice(target=result, resultment=False, flag=False)) # 그자리에서 재생하기
     
-    def detecting(self):
-        print("Talking...")
+    def detecting(self): # SioPackage/main.py 
         self.keyword = self.Neuron.Trans(self.index) # 음성 정보를 keyword로써 변환후 변수에 저장
-        print("Speaking...")
-        keywords = str(self.keyword).split(" ") # 문자 하나하나 모두 각각 배열로 분할
-        for i in range(len(keywords)):
-            if keywords[i] == "멈춰": # 멈춰 단어가 인식되면 종료
-                speech = Speech(str("프로그램 가동을 멈춥니다."), "ko") # TTS
-                speech.play()
-                print("Stopping and Exiting...")
-                os._exit(0)
         print(self.keyword) # 단어 출력
         Q, A, embedding_time = self.api.send_response(self.token, self.keyword) # 위에서 매개변수로 삼은 token과 받은 keyword를 매개변수로써 전송
         print(embedding_time) # 시간 출력
-        self.detection(A) # detection 함수 호출
+        print("Talking...")
+        self.detection(A) # detection 함수 호출 여기가 말하는 부분 TTS
         if A == "카드를 삽입해주십시오. 결제가 완료되었습니다 방문해주셔서 감사합니다":
             os._exit(0)

@@ -30,11 +30,4 @@ class NeuronAggregate:
     def Trans(self, index):
         text_result = self.converter.Detecting(index) # 인식된 text를 다시 변환
         print("text_result: " + str(text_result)) # String으로 변환하여 결과 출력
-        if text_result == None: # 아무것도 인식되어지지 않은 경우
-            while True:
-                text_result = self.converter.Detecting(index) # 인식될때까지 무한 반복
-                if text_result != None:
-                    print(text_result)
-                    return text_result # 인식되면 return
-        else:
-            return text_result # 바로 인식된 경우, 바로 반환
+        return text_result # 바로 인식된 경우, 바로 반환
