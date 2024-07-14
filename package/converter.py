@@ -15,7 +15,7 @@ class SpeechToTextConverter:
             detected.append(str(f"[{index}] {name}")) # 존재하는 마이크 append
         return detected
     
-    def Detecting(self, index):
+    def Detecting(self, index): # 
         mic = self.detection.Microphone(device_index=index)
         with mic as source:
             self.detector.dynamic_energy_threshold = True
@@ -23,8 +23,8 @@ class SpeechToTextConverter:
             while True:  # 무한 루프로 음성 감지 시도
                 try:
                     stra = time.time()
-                    audio = self.detector.listen(source, timeout=1.5, phrase_time_limit=10)  # 2.5초 동안만 듣기 시도
-                    result = self.detector.recognize_google(audio, language="ko-KR")
+                    audio = self.detector.listen(source, timeout=1.5, phrase_time_limit=3)  # 1.5초 동안만 듣기 시도
+                    result = self.detector.recognize_google(audio, language="ko-KR") # google_google: ko-KR, whisper: ko
                     print("Embbedd time: " + str(time.time() - stra))
                     return result
                 except self.error_non:

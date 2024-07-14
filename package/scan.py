@@ -33,7 +33,7 @@ def windows_track(port) -> int:
             program = stdout.split("\n")[3].split(" ")[0]
             if program == "python.exe":
                 return f"{program} | {str(pid_val)}"
-        return True
+        return True, program
     except Exception as e:
         return False, program
 
@@ -51,14 +51,20 @@ def unix_track(port):
         else:
             return False, processer
     else:
-        return True
-        
+        return True, processer
+
 def find_process_by_port(port):
     try:
         if os_system == "Windows":
-            return_data, processer = windows_track(port)
+            try:
+                return_data, processer = windows_track(port)
+            except ValueError:
+                return_data = windows_track(port)
         else:
-            return_data, processer = unix_track(port)
+            try:
+                return_data, processer = unix_track(port)
+            except ValueError:
+                return_data = unix_track(port)
 
         if return_data == False:
             print("\033[1;31m" + "ERROR" + "\033[0m" + ":" + f"     Is there any process is working on Port 9460? | {processer} is running currently")
@@ -84,12 +90,12 @@ def find_process_by_port(port):
 def find_process_by_port_Voice(port):
     try:
         if os_system == "Windows":
-            return_data = windows_track(port)
+            return_data, processer = windows_track(port)
         else:
-            return_data = unix_track(port)
+            return_data, processer = unix_track(port)
 
         if return_data == False:
-            print("\033[1;31m" + "ERROR" + "\033[0m" + ":" + f"     Is there any process is working on Port 9460?")
+            print("\033[1;31m" + "ERROR" + "\033[0m" + ":" + f"     Is there any process is working on Port 9460? | {processer} is running currently")
             raise ServerPortUsingError
         elif return_data == True:
             result_data =  f'No process found using port {port}'
