@@ -24,7 +24,7 @@ class Loading:
 
 class TextToSpeech:
     def __init__(self) -> None:
-        self.VOICE = "ko-KR-SunHiNeural"
+        self.VOICE = "ko-KR-HyunsuNeural"
         self.Loading = Loading()
         if self.VOICE == "ko-KR-HyunsuNeural":
             self.CHUNK_REMOVE = -1000
