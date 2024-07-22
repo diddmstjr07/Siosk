@@ -23,7 +23,7 @@ class API:
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             sock.connect(("pwnbit.kr", 443))
-            response = requests.get(f"{self.url}:946/access?token={self.token}&host={os.getlogin()}&ip={sock.getsockname()[0]}", verify=False) # 쿼리문자열을 활용한 Get 요청을 보냄 
+            response = requests.get(f"{self.url}:9460/access?token={self.token}&host={os.getlogin()}&ip={sock.getsockname()[0]}", verify=False) # 쿼리문자열을 활용한 Get 요청을 보냄 
             result = response.json()['message'] # json 데이터로 추출하여 detail 키에 대한 값을 변수에 저장
             if result == 'error': # 토큰이 부적절한 경우 에러 메세지를 띄움
                 webbrowser.open(self.url)
