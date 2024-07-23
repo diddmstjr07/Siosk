@@ -67,7 +67,7 @@ class TextToSpeech:
                 target_data_que = str(target_data_val).split(' | ')[0]
                 target_data_ans = str(target_data_val).split(' | ')[1]
                 if '?' or ' ' in target_data_ans:
-                    target_data_ans = target_data_ans.replace('?', ".").replace(' ', '')
+                    target_data_ans = target_data_ans.replace('?', ";")
                 communicate = edge_tts.Communicate(target_data_ans, self.VOICE)
                 await communicate.save(f"Siosk/assets/audio/{target_data_ans}.mp3")
                 self.Loading.update_progress_bar(total_steps, progress_bar, 100 / len(target_datas))

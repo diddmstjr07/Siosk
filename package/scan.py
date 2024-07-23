@@ -29,7 +29,7 @@ def windows_track(port) -> int:
             process = subprocess.Popen(f"tasklist /FI \"PID eq {pid_val}\"", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
             stdout, stderr = process.communicate()
             program = stdout.split("\n")[3].split(" ")[0]
-            if program == "python.exe":
+            if "python" in program:
                 return f"{program} | {str(pid_val)}"
         return True, "None"
     except Exception as e:
@@ -97,7 +97,7 @@ def find_process_by_port_Voice(port):
                     return_data, processer = unix_track(port)
                 except ValueError:
                     return_data = unix_track(port)
-
+        
         if return_data == False:
             print("\033[1;31m" + "ERROR" + "\033[0m" + ":" + f"     Is there any process is working on Port 9460? | {processer} is running currently")
             raise ServerPortUsingError
