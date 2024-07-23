@@ -31,7 +31,7 @@ def windows_track(port) -> int:
             program = stdout.split("\n")[3].split(" ")[0]
             if program == "python.exe":
                 return f"{program} | {str(pid_val)}"
-        return True, program
+        return True, "None"
     except Exception as e:
         return False, program
 
