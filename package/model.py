@@ -67,9 +67,11 @@ class API:
             os._exit(0) # 문자의 종류가 str이 아닌 경우 exit
 
     def detection(self, result:str): # API로부터 반환되어진 result 값을 인자로
-        filename = "Siosk/assets/audio/" + result.replace('?', ";") + ".mp3" # file name creation
-        if os.path.isfile(filename): # 있다면,
-            asyncio.run(self.TextToSpeech.voice(target=False, resultment=filename, flag=True)) # 그 파일 재생하기
+        filename = str("Siosk/assets/audio/" + result.replace('?', ";") + ".mp3") # file name creation
+        file_path = os.path.abspath(filename)
+        if os.path.exists(file_path): # 있다면,
+            print(file_path)
+            asyncio.run(self.TextToSpeech.voice(target=False, resultment=file_path, flag=True)) # 그 파일 재생하기
         else: # 없으면
             asyncio.run(self.TextToSpeech.voice(target=result, resultment=False, flag=False)) # 그자리에서 재생하기
     
