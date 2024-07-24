@@ -61,12 +61,12 @@ class API:
 
     def texture(self, keyword):
         if isinstance(keyword, six.string_types):  # keyword의 종류가 문자열인지 확인
-            Q, A, embedding_time = self.api.send_response(self.token, keyword) # 위에서 매개변수로 삼은 token과 받은 keyword를 매개변수로써 전송
-            return A, embedding_time # 다시 결과와 시간을 return
+            Q, A, F, embedding_time = self.api.send_response(self.token, keyword) # 위에서 매개변수로 삼은 token과 받은 keyword를 매개변수로써 전송
+            return Q, A, F, embedding_time # 다시 결과와 시간을 return
         else:
             os._exit(0) # 문자의 종류가 str이 아닌 경우 exit
 
-    def detection(self, result:str): # API로부터 반환되어진 result 값을 인자로
+    def detection(self, ques:str, result:str, flag:str): # API로부터 반환되어진 result 값을 인자로
         filename = str("Siosk/assets/audio/" + result.replace('?', ";") + ".mp3") # file name creation
         file_path = os.path.abspath(filename)
         if os.path.exists(file_path): # 있다면,
@@ -74,13 +74,56 @@ class API:
             asyncio.run(self.TextToSpeech.voice(target=False, resultment=file_path, flag=True)) # 그 파일 재생하기
         else: # 없으면
             asyncio.run(self.TextToSpeech.voice(target=result, resultment=False, flag=False)) # 그자리에서 재생하기
+        
+    def classifying(self, Q:str, F):
+        if F == '3':
+            splited_menu = Q.split(" 줄래?")[0]
+        elif F == '4':
+            splited_menu = Q.split(" 줘")[0]
+            if splited_menu == "하나":
+                splited_menu = "한잔"
+            elif splited_menu[-1] != "잔":
+                splited_menu = splited_menu.replace(splited_menu[-1], "잔")
+        elif F == '5':
+            if Q == "차갑게 줘":
+                splited_menu = "Cold"
+            elif Q == "따뜻하게 줘":
+                splited_menu = "Warm"
+        elif F == '6':
+            if Q == "네" or Q == "어" or Q == "그래" or Q == "넣어줘" or Q == "장바구니에 넣어줘":
+                splited_menu = True
+            else:
+                splited_menu = False
+        elif F == '7':
+            if Q == '주문할게' or Q == '결제할게' or Q == '취소할게':
+                splited_menu = "order"
+        else:
+            splited_menu = Q
+            print(splited_menu)
+        return splited_menu
+    
+    def logger(self, classified, flag):
+        file_path = 'Siosk/package/log/logger.log'
+        is_empty = True
+        with open(file_path, 'r', encoding='utf-8') as file:
+            if file.read(1) != "":
+                is_empty = False
+        with open(file_path, 'a', encoding='utf-8') as mod:
+            if is_empty == False:
+                mod.write('\n')
+                mod.write(str(classified) + " | " + str(flag))
+            else:
+                mod.write(str(classified) + " | " + str(flag))
     
     def detecting(self): # SioPackage/main.py 
         self.keyword = self.Neuron.Trans(self.index) # 음성 정보를 keyword로써 변환후 변수에 저장
         print(self.keyword) # 단어 출력
-        Q, A, embedding_time = self.api.send_response(self.token, self.keyword) # 위에서 매개변수로 삼은 token과 받은 keyword를 매개변수로써 전송
+        Q, A, F, embedding_time = self.api.send_response(self.token, self.keyword) # 위에서 매개변수로 삼은 token과 받은 keyword를 매개변수로써 전송
         print(embedding_time) # 시간 출력
         print("Talking...")
-        self.detection(A) # detection 함수 호출 여기가 말하는 부분 TTS
+        classified = self.classifying(Q, F)
+        self.logger(classified=classified, flag=F)
+        self.detection(Q, A, F) # detection 함수 호출 여기가 말하는 부분 TTS
         if A == "카드를 삽입해주십시오. 결제가 완료되었습니다 방문해주셔서 감사합니다":
             os._exit(0)
+        return classified

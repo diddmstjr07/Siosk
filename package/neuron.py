@@ -1,4 +1,5 @@
 from .converter import SpeechToTextConverter
+from auto.clear_terminal import clear_terminal
 
 class NeuronAggregate:
     def __init__(self) -> None:
@@ -24,8 +25,14 @@ class NeuronAggregate:
         for i in range(len(micro_result)): 
             print(micro_result[i]) # 마이크 정보 출력
         print("-----------------------------------\n")
-        index = int(input("Please Select Microphone and Type number of index: "))
-        return index # 선택한 인덱스 반환
+        while True:
+            try:
+                index = int(input("Please Select Microphone and Type number of index: "))
+                self.os.system(clear_terminal())
+                return index # 선택한 인덱스 반환
+            except ValueError:
+                print("\033[31m" + "ERROR" + "\033[0m" + ": " "     Please type only integer texture")
+
 
     def Trans(self, index):
         text_result = self.converter.Detecting(index) # 인식된 text를 다시 변환
