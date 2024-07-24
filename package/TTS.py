@@ -61,7 +61,7 @@ class TextToSpeech:
         else:
             os.mkdir(folder_path)
         progress_bar, total_steps = self.Loading.setting_progress_bar()
-        with open('conversation.json', 'r', encoding='utf-8') as file:
+        with open('Siosk/package/conversation.json', 'r', encoding='utf-8') as file:
             target_datas = json.load(file)
             for target_data_index, target_data_val in enumerate(target_datas):
                 target_data_que = str(target_data_val).split(' | ')[0]
