@@ -1,9 +1,7 @@
 import requests
 from urllib3.exceptions import InsecureRequestWarning
 import time
-from Siosk.package.error_manage import ConnectionRefusedError
-from Siosk.package.error_manage import ServerDownedError
-
+from Siosk.package.error_manage import ConnectionRefusedError, ServerDownedError, ServerSyntexError
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 import webbrowser
 import socket
@@ -35,3 +33,6 @@ class Api: # Server Connection
         except requests.exceptions.ConnectionError:
             print("\033[31m" + '404 Refused Error' + "\033[0m" + ': Server is downed... Please Contact us we will found problem immediately') # 연결 에러인 경우, 서버 다운 메세지 출력
             raise ServerDownedError
+        except requests.exceptions.JSONDecodeError:
+            print("\033[31m" + '404 Refused Error' + "\033[0m" + ': Server Syntex error happened... Please Contact us we will found problem immediately') # 연결 에러인 경우, 서버 다운 메세지 출력
+            raise ServerSyntexError

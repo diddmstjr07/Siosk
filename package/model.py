@@ -79,11 +79,19 @@ class API:
         if F == '3':
             splited_menu = Q.split(" 줄래?")[0]
         elif F == '4':
-            splited_menu = Q.split(" 줘")[0]
-            if splited_menu == "하나":
-                splited_menu = "한잔"
-            elif splited_menu[-1] != "잔":
-                splited_menu = splited_menu.replace(splited_menu[-1], "잔")
+            splited_menu = str(Q.split(" 줘")[0])[0]
+            if splited_menu == "한":
+                splited_menu = '1'
+            elif splited_menu == "두":
+                splited_menu = '2'
+            elif splited_menu == "세":
+                splited_menu = '3'
+            elif splited_menu == "네":
+                splited_menu = '4'
+            elif splited_menu == "다":
+                splited_menu = '5'
+            elif splited_menu == "여":
+                splited_menu = '6'
         elif F == '5':
             if Q == "차갑게 줘":
                 splited_menu = "Cold"
@@ -124,6 +132,4 @@ class API:
         classified = self.classifying(Q, F)
         self.logger(classified=classified, flag=F)
         self.detection(Q, A, F) # detection 함수 호출 여기가 말하는 부분 TTS
-        if A == "카드를 삽입해주십시오. 결제가 완료되었습니다 방문해주셔서 감사합니다":
-            os._exit(0)
-        return classified
+        return A

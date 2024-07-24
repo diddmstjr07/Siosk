@@ -13,5 +13,8 @@ class ServerDownedError(Exception):
 class ServerPortUsingError(Exception):
     pass
 
+class ServerSyntexError(Exception):
+    pass
+
 class NonDetectedError(Exception):
     pass
