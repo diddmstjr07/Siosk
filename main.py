@@ -10,4 +10,4 @@ api = API(
 if __name__ == "__main__":
     delete_dot_underscore_files()
     api.preparing()
-    api.detecting()
+    api.detecting() 
